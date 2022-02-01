@@ -1,0 +1,1 @@
+The scripts in this directory are initial scripts I generally run when starting out the game.
