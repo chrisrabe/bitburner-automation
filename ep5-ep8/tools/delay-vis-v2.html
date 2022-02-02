@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hack delays visualiser</title>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script>
+        (function() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const rectHeight = 50;
+            const startHeight = 25;
+            const gap = 15;
+
+          
+            // resize the canvas to fill browser window dynamically
+            window.addEventListener('resize', resizeCanvas, false);
+                  
+            function resizeCanvas() {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+                          
+              /**
+               * Your drawings need to be inside this function otherwise they will be reset when 
+               * you resize the browser window and the canvas goes will be cleared.
+               */
+               drawTimings(); 
+            }
+            
+            resizeCanvas();
+
+            function drawLine(x1, y1, x2, y2) {
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+
+            function drawRect(x, y, width, height, variant) {
+                const colorMap = {
+                    w: '#ff5050',
+                    g: '#33cc33',
+                    h: '#ffcc99',
+                    t: '#993399',
+                    d: '#3366ff'
+                }
+                let color = colorMap[variant];
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, width, height);
+                ctx.fillStyle = "#000";
+            }
+
+            function drawExecLines(startX, offset, max) {
+                const lineHeight = 500;
+                const execStart = [];
+                for (let i = 0; i < max; i++) {
+                    const lineX = startX + (offset * i);
+                    execStart.push(lineX);
+                    drawLine(lineX, 0, lineX, lineHeight);
+                }
+                return execStart;
+            }
+
+            function drawSequence(seq, timing, execStart) {
+                const actionStart = [];
+                // Go through sequence and draw actions
+                for (let i = 0; i < seq.length; i++) {
+                    const action = seq[i];
+                    const execTime = timing[action];
+                    const x = execStart[i] - execTime;
+                    const y = (startHeight + (rectHeight * i)) + (gap * i);
+                    actionStart.push(x);
+                    // draw sequence
+                    drawRect(x, y, execTime, rectHeight, action);
+                }
+                return actionStart;
+            }
+
+            function drawDelay(t0, actionStart) {
+                for (let i = 0; i < actionStart.length; i++) {
+                    const delay = Math.abs(t0 - actionStart[i]);
+                    const y = (startHeight + (rectHeight * i)) + (gap * i);
+                    drawRect(t0, y, delay, rectHeight, 'd');
+                }
+            }
+
+            function drawFullTiming(actionStart, execStart) {
+                const t0 = Math.min(...actionStart);
+                const tWidth = Math.abs(t0 - execStart[execStart.length - 1]);
+                // full timing
+                drawRect(t0, (startHeight + (rectHeight * actionStart.length)) + (gap * actionStart.length), tWidth, rectHeight, 't');
+                return t0;
+            }
+
+            function drawTimings() {
+                const startX = 300;
+                const attackDelay = 50;
+                const h = 120;
+                const w = 130;
+                const g = 200;
+                const timing = {
+                    h,
+                    w,
+                    g
+                };
+
+                const seq = ['g', 'w', 'h', 'w'];
+                const execStart = drawExecLines(startX, attackDelay, seq.length);
+                const actionStart = drawSequence(seq, timing, execStart);
+                const t0 = drawFullTiming(actionStart, execStart);
+                drawDelay(t0, actionStart);
+            }
+          })();
+        </script>
+    </body>
+</html>

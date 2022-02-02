@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hack delays visualiser</title>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script>
+        (function() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+          
+            // resize the canvas to fill browser window dynamically
+            window.addEventListener('resize', resizeCanvas, false);
+                  
+            function resizeCanvas() {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+                          
+              /**
+               * Your drawings need to be inside this function otherwise they will be reset when 
+               * you resize the browser window and the canvas goes will be cleared.
+               */
+              drawStuff(); 
+            }
+            
+            resizeCanvas();
+
+            function drawLine(x1, y1, x2, y2) {
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+
+            function drawRect(x, y, width, height, variant) {
+                const colorMap = {
+                    w: '#ff5050',
+                    g: '#33cc33',
+                    h: '#ffcc99',
+                    t: '#993399',
+                    d: '#3366ff'
+                }
+                let color = colorMap[variant];
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, width, height);
+                ctx.fillStyle = "#000";
+            }
+
+            function drawStuff() {
+                const startX = 300;
+                const lineHeight = 500;
+                const o = 50;
+                const h = 120;
+                const w = 130;
+                const g = 200;
+
+                // h, w, g, w
+
+                const lineX1 = startX;
+                const lineX2 = startX + o;
+                const lineX3 = startX + (2*o);
+                const lineX4 = startX + (3*o);
+
+                drawLine(lineX1, 0, lineX1, lineHeight);
+                drawLine(lineX2, 0, lineX2, lineHeight);
+                drawLine(lineX3, 0, lineX3, lineHeight);
+                drawLine(lineX4, 0, lineX4, lineHeight);
+
+                var rectHeight = 50;
+                var startHeight = 25;
+                var gap = 15;
+
+                const hX = lineX1 - h;
+                const wX1 = lineX2 - w;
+                const gX = lineX3 - g;
+                const wX2 = lineX4 - w;
+
+                const tX = Math.min(hX, wX1, wX2, gX);
+                const tWidth = Math.abs(tX - lineX4);
+
+                // // // hack
+                drawRect(hX, startHeight, h, rectHeight, 'h');
+                // // // // weaken 1
+                drawRect(wX1, (startHeight + rectHeight) + gap, w, rectHeight, 'w');
+                // // // // grow
+                drawRect(gX, (startHeight + (rectHeight * 2)) + (gap * 2), g, rectHeight, 'g');
+                // // // // weaken 2
+                drawRect(wX2, (startHeight + (rectHeight * 3)) + (gap * 3), w, rectHeight, 'w');
+
+                // // // // full timing
+                drawRect(tX, (startHeight + (rectHeight * 4)) + (gap * 4), tWidth, rectHeight, 't');
+
+                // // // // display delays
+                const hDelay = Math.abs(tX - hX);
+                const w1Delay = Math.abs(tX - wX1);
+                const gDelay = Math.abs(tX - gX);
+                const w2Delay = Math.abs(tX - wX2);
+
+                // // // // hack
+                drawRect(tX, startHeight, hDelay, rectHeight, 'd');
+                // // // // weaken 1
+                drawRect(tX, (startHeight + rectHeight) + gap, w1Delay, rectHeight, 'd');
+                // // // // grow
+                drawRect(tX, (startHeight + (rectHeight * 2)) + (gap * 2), gDelay, rectHeight, 'd');
+                // // // // weaken 2
+                drawRect(tX, (startHeight + (rectHeight * 3)) + (gap * 3), w2Delay, rectHeight, 'd');
+            }
+          })();
+        </script>
+    </body>
+</html>
