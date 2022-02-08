@@ -28,6 +28,13 @@
 		}
 	}
 
+	async function purchaseServer(server) {
+		while (!canPurchaseServer()) {
+			await ns.sleep(10000); // wait 10s
+		}
+		ns.purchaseServer(server, pRam);
+	}
+
 	async function autoUpgradeServers() {
 		var i = 0;
 		while (i < maxServers) {
@@ -36,9 +43,9 @@
 				ns.print("Upgrading server " + server + " to " + pRam + "GB");
 				await upgradeServer(server);
 				++i;
-			} else if (canPurchaseServer()) {
+			} else {
 				ns.print("Purchasing server " + server + " at " + pRam + "GB");
-				ns.purchaseServer(server, pRam);
+				await purchaseServer(server, pRam);
 				++i;
 			}
 		}
