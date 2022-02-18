@@ -1,4 +1,10 @@
-import { getNetworkNodes, canHack, getThresholds, getRootAccess } from "./utils.js";
+import {
+	getNetworkNodes,
+	canHack,
+	getThresholds,
+	getRootAccess,
+	canPenetrate
+} from "./utils.js";
 import { pushToInputPort, checkForEvent } from "./port-utils.js";
 
 /** @param {NS} ns **/
@@ -156,7 +162,7 @@ export async function main(ns) {
 	function getPotentialTargets() {
 		var networkNodes = getNetworkNodes(ns);
 		var hackableNodes = networkNodes.filter(node => {
-			return canHack(ns, node) && !node.includes("pserv")
+			return canHack(ns, node) && canPenetrate(ns, node, cracks) && !node.includes("pserv")
 		});
 		// Prepare the servers to have root access
 		for (var serv of hackableNodes) {

@@ -1,4 +1,10 @@
-import { getNetworkNodes, canHack, getThresholds, getRootAccess } from "./utils.js";
+import {
+	getNetworkNodes,
+	canHack,
+	getThresholds,
+	getRootAccess,
+	canPenetrate
+} from "./utils.js";
 
 function getComparator(compareField) {
 	return (a, b) => {
@@ -48,7 +54,7 @@ function getNodeInfo(ns, node) {
 	};
 	for (var key of Object.keys(strategy)) {
 		var value = strategy[key];
-		nodeDetails['strategy.'+key] = value;
+		nodeDetails['strategy.' + key] = value;
 	}
 	return nodeDetails;
 }
@@ -83,7 +89,7 @@ export function getStrategy(ns, node) {
 export function getPotentialTargets(ns, compareField = "revYield") {
 	var networkNodes = getNetworkNodes(ns);
 	var hackableNodes = networkNodes.filter(node => {
-		return canHack(ns, node) && !node.includes("pserv")
+		return canHack(ns, node) && canPenetrate(ns, node, cracks) && !node.includes("pserv")
 	});
 
 	const cracks = {
