@@ -1,4 +1,4 @@
-import { getNetworkNodes, canHack, getThresholds } from "./utils.js";
+import { getNetworkNodes, canHack, getThresholds, getRootAccess } from "./utils.js";
 
 function getComparator(compareField) {
 	return (a, b) => {
@@ -85,6 +85,22 @@ export function getPotentialTargets(ns, compareField = "revYield") {
 	var hackableNodes = networkNodes.filter(node => {
 		return canHack(ns, node) && !node.includes("pserv")
 	});
+
+	const cracks = {
+		"BruteSSH.exe": ns.brutessh,
+		"FTPCrack.exe": ns.ftpcrack,
+		"relaySMTP.exe": ns.relaysmtp,
+		"HTTPWorm.exe": ns.httpworm,
+		"SQLInject.exe": ns.sqlinject
+	};
+
+	// Prepare the servers to have root access
+	for (var serv of hackableNodes) {
+		if (!ns.hasRootAccess(serv)) {
+			getRootAccess(ns, serv, cracks);
+		}
+	}
+
 	var nodeDetails = hackableNodes.map(node => getNodeInfo(ns, node));
 	var nodesDesc = nodeDetails
 		.filter(node => node.maxMoney > 0)

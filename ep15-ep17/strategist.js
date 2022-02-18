@@ -1,4 +1,4 @@
-import { getNetworkNodes, canHack, getThresholds } from "./utils.js";
+import { getNetworkNodes, canHack, getThresholds, getRootAccess } from "./utils.js";
 import { pushToInputPort, checkForEvent } from "./port-utils.js";
 
 /** @param {NS} ns **/
@@ -14,6 +14,14 @@ export async function main(ns) {
 
 	const reqEvent = "reqTargets"; // request event
 	const resEvent = "resTargets"; // response event
+
+	const cracks = {
+		"BruteSSH.exe": ns.brutessh,
+		"FTPCrack.exe": ns.ftpcrack,
+		"relaySMTP.exe": ns.relaysmtp,
+		"HTTPWorm.exe": ns.httpworm,
+		"SQLInject.exe": ns.sqlinject
+	};
 
 	function getDelayForActionSeq(seq, node) {
 		var server = ns.getServer(node);
@@ -150,6 +158,12 @@ export async function main(ns) {
 		var hackableNodes = networkNodes.filter(node => {
 			return canHack(ns, node) && !node.includes("pserv")
 		});
+		// Prepare the servers to have root access
+		for (var serv of hackableNodes) {
+			if (!ns.hasRootAccess(serv)) {
+				getRootAccess(ns, serv, cracks);
+			}
+		}
 		var nodeDetails = hackableNodes.map(node => getNodeInfo(node));
 		var nodesDesc = nodeDetails
 			.filter(node => node.maxMoney > 0)
