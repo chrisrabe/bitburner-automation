@@ -29,6 +29,9 @@ export async function main(ns) {
 		for (const fleet of fleets) {
 			const action = fleet.action;
 			for (const ship of fleet.ships) {
+				if (ship.threads < 1) {
+					continue; // skip
+				}
 				let pid = 0;
 				while (ns.exec(virus, ship.serv, ship.threads, action, target, ship.delay, pid) === 0) {
 					pid++;
