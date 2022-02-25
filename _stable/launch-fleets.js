@@ -285,6 +285,9 @@ export async function main(ns) {
 			for (var fleet of fleets) {
 				var action = fleet.action;
 				for (var ship of fleet.ships) {
+					if (ship.threads < 1) {
+						continue; // skip
+					}
 					var pid = 0;
 					while (ns.exec(virus, ship.serv, ship.threads, action, targetNode, ship.delay, pid) === 0) {
 						pid++;
