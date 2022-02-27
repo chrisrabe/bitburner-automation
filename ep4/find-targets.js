@@ -13,6 +13,9 @@ export async function main(ns) {
 		var server = ns.getServer(node);
 		var maxMoney = ns.getServerMaxMoney(node);
 		var chance = ns.formulas.hacking.hackChance(server, player);
+		chance = chance * 100;
+		chance = Math.round((chance + Number.EPSILON) * 100) / 100;
+		chance = chance + "%"
 		var reqHackLevel = ns.getServerRequiredHackingLevel(node);
 		return {
 			node,
