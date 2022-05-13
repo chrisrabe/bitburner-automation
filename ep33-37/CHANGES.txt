@@ -1,0 +1,53 @@
+New Launch Fleets script (gimme-more-money.js)
+
+- separated pirate into their own components (hack-pirate, weaken-pirate, grow-pirate)
+- create flags for specifying home server RAM allocation
+- use unix timestamp as PID rather than having a while loop determine it
+- ships are now updated on memory reference
+
+List of args:
+- homeRam: number
+- compareField: revYield | maxMoney
+
+Main Logic:
+
+- Retrieve list of available servers (each server has name, available RAM, and flag that indicates player owned)
+  - get list of available servers
+  - get list of owned servers
+  - get home server RAM
+
+- Prepare servers
+  - copy hacking scripts over if they don't exist
+  - ensure that we have root access
+
+- Retrieve list of targets
+  - maxMoney
+  - nodeName
+  - revYield
+
+- Retrieve requirements
+  - strategy
+  - delays
+  - maximum threads
+
+- Create attack fleets
+  - Retrieve number of threads we'll allocate for each action
+  - Group servers into actions
+
+- Launch attack
+  - for every ship, execute their action with the args
+  - log activity
+  - delete assigned ship
+
+Kill network scripts
+
+List of args:
+- includeHome: boolean
+
+Main Logic:
+
+- Create a list of network nodes to kill scripts on
+- Add all crackable network nodes to network nodes
+- Add all purchased servers to network nodes
+- Add home server to network nodes if includeHome flag is true
+- for every node, kill all the running scripts
