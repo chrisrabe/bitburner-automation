@@ -8,7 +8,7 @@ export async function main(ns) {
         'auto-purchase-server.js',
         'auto-starter.js',
         'book-keeper.js',
-        'captain.js'.
+        'captain.js',
         'diamond-hands.js',
         'find-server.js',
         'find-targets.js',
@@ -17,7 +17,7 @@ export async function main(ns) {
         'launch-fleets.js',
         'pirate.js',
         'port-utils.js',
-        'probe.js'
+        'probe.js',
         'queue-service.js',
         'strategist.js',
         'utils.js',
@@ -29,3 +29,5 @@ export async function main(ns) {
     ns.tprintf ('Pulling ' + script + ' off gitHub');
     await ns.wget('https://raw.githubusercontent.com/chrisrabe/bitburner-automation/main/_stable/' + script , script, "home");
   }
+
+}
