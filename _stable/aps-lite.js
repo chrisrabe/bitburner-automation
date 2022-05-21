@@ -38,7 +38,6 @@
 		await waitForMoney();
 		ns.purchaseServer(server, pRam);
 		ns.print(`WARN 💰 PURCHASE ${server} @ ${pRam}GB`);
-		await copyAndRunVirus(server);
 	}
 
 	async function autoUpgradeServers() {
