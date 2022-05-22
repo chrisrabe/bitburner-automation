@@ -187,5 +187,6 @@ export async function main(ns) {
 		const nodesToUpgrade = getBestNodesToUpgrade(nodes);
 		const purchaseInfo = getPurchaseInfo();
 		await doNextAction(purchaseInfo, nodesToUpgrade);
+		await ns.sleep(1000);
 	}
 }
