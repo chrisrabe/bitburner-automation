@@ -73,4 +73,5 @@ export async function main(ns) {
 	var path = reconstructPath(nodes);
 	const printedStr = path.map(node => `connect ${node}`).join(';');
 	ns.tprint(printedStr);
+	navigator.clipboard.writeText(printedStr);
 }

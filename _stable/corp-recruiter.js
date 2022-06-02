@@ -91,11 +91,10 @@ export async function main(ns) {
 	}
 
 	const upgradeOffice = async () => {
-		const business = corp.getCorporation();
 		const sizeToBuy = reqEmployees - office.size;
 		ns.tprint(`Opening ${sizeToBuy} employee positions...`);
 		const upgradeCost = corp.getOfficeSizeUpgradeCost(divisionName, cityName, sizeToBuy);
-		while (business.funds < upgradeCost) {
+		while (corp.getCorporation().funds < upgradeCost) {
 			await ns.sleep(1000); // wait until we have enough money
 		}
         corp.upgradeOfficeSize(divisionName, cityName, sizeToBuy);

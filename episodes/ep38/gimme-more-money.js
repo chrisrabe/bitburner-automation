@@ -156,7 +156,7 @@ export async function main(ns) {
 	const getHomeServerMaxRam = () => {
 		if (isNaN(flagData.homeRam)) {
 			const inputPercent = parseFloat(flagData.homeRam) / 100;
-			return Math.floor(ns.getServerMaxRam(homeRam) * inputPercent);
+			return Math.floor(ns.getServerMaxRam(homeServ) * inputPercent);
 		} else {
 			return Math.floor(ns.getServerMaxRam(homeServ) - flagData.homeRam);
 		}
