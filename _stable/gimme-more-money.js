@@ -18,6 +18,7 @@ export async function main(ns) {
 
 	const homeServ = "home";
 	const pServPrefix = "pserv-"; // purchased servers
+	const hServPrefix = "hacknet"; // hacknet servers
 
 	const attackDelay = 50; // time between attacks (ms)
 
@@ -121,8 +122,8 @@ export async function main(ns) {
 	const getCrackableNetworkServers = () => {
 		const networkNodes = getNetworkNodes();
 		const hackableServers = networkNodes.filter(node => {
-			if (node == homeServ || node.includes(pServPrefix)) {
-				return false; // ignore home or purchased server
+			if (node == homeServ || node.includes(pServPrefix) || node.includes(hServPrefix)) {
+				return false; // ignore home, hacknet or purchased server
 			}
 			return canPenetrate(node);
 		});
