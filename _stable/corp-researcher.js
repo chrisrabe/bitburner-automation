@@ -10,29 +10,48 @@
 		throw new Error("Division name not defined.");
 	}
 
-	const researchNames = {
-		lab: 'Hi-Tech R&D Laboratory',
-		marketTA1: 'Market-TA.I',
-		marketTA2: 'Market-TA.II',
-		fulcrum: 'uPgrade: Fulcrum',
-		capacity1: 'uPgrade: Capacity.I',
-		capacity2: 'uPgrade: Capacity.II'
+	const corp = eval("ns.corporation");
+	//const corp = ns.corporation;
+	const division = corp.getDivision(divisionName);
+
+	var researchNames;
+	var researchOrder;
+
+	if (division.makesProducts) {
+		researchNames = {
+			lab: 'Hi-Tech R&D Laboratory',
+			marketTA1: 'Market-TA.I',
+			marketTA2: 'Market-TA.II',
+			fulcrum: 'uPgrade: Fulcrum',
+			capacity1: 'uPgrade: Capacity.I',
+			capacity2: 'uPgrade: Capacity.II'
+		};
+
+		researchOrder = [
+			researchNames.lab,
+			researchNames.marketTA1,
+			researchNames.marketTA2,
+			researchNames.fulcrum,
+			researchNames.capacity1,
+			researchNames.capacity2
+		];
+	}
+	else {
+		researchNames = {
+			lab: 'Hi-Tech R&D Laboratory',
+			marketTA1: 'Market-TA.I',
+			marketTA2: 'Market-TA.II'
+		};
+
+		researchOrder = [
+			researchNames.lab,
+			researchNames.marketTA1,
+			researchNames.marketTA2
+		];
 	}
 
-	const researchOrder = [
-		researchNames.lab,
-		researchNames.marketTA1,
-		researchNames.marketTA2,
-		researchNames.fulcrum,
-		researchNames.capacity1,
-		researchNames.capacity2
-	]
-
-	const corp = eval("ns.corporation");
-
 	const getResearchPoints = () => {
-		const division = corp.getDivision(divisionName);
-		return division.research;
+		division.research;
 	}
 
 	const getResearchLeft = () => 
