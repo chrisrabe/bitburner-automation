@@ -146,19 +146,21 @@ export async function main(ns) {
 	while (true) {
 		const business = corp.getCorporation();
 		for (const div of business.divisions) {
-			const products = getProducts(div);
-			if (isDevelopingProduct(products)) {
-				ns.print(`ERROR\t${div.name}: Currently developing a product`);
-				continue;
+			if (div.makesProducts) {
+				const products = getProducts(div);
+				if (isDevelopingProduct(products)) {
+					ns.print(`ERROR\t${div.name}: Currently developing a product`);
+					continue;
+				}
+
+				const maxProducts = getMaxProducts(div.name);
+
+				if (canDevelopProduct(business) && shouldDevelopProduct(products, maxProducts)) {
+					developProduct(div, products, maxProducts);
+				}
+
+				ns.print(`SUCCESS\t${div.name}: All products are generating money`);
 			}
-
-			const maxProducts = getMaxProducts(div.name);
-
-			if (canDevelopProduct(business) && shouldDevelopProduct(products, maxProducts)) {
-				developProduct(div, products, maxProducts);
-			}
-
-			ns.print(`SUCCESS\t${div.name}: All products are generating money`);
 		}
 		await ns.sleep(interval);
 	}
