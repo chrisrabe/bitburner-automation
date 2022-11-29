@@ -72,7 +72,7 @@ export async function main(ns) {
 	function yolo(stocks) {
 		const riskThresh = 20 * fees;
 		for (const stock of stocks) {
-			const money = ns.getPlayer().money;
+			const money = ns.getPlayer().money * 0.25; //Limit the money used to 25% of player funds
 			if (stock.forecast > 0.55) {
 				if (money > riskThresh) {
 					const sharesWeCanBuy = Math.floor((money - fees) / stock.askPrice);
