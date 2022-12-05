@@ -51,7 +51,7 @@ export async function main(ns) {
 			overallValue += curValue;
 		} else {
 			// Take tendies!
-			const salePrice = ns.stock.sell(stock.sym, stock.longShares);
+			const salePrice = ns.stock.sellStock(stock.sym, stock.longShares);
 			const saleTotal = salePrice * stock.longShares;
 			const saleCost = stock.longPrice * stock.longShares;
 			const saleProfit = saleTotal - saleCost - tradeFees;
@@ -72,12 +72,12 @@ export async function main(ns) {
 	function yolo(stocks) {
 		const riskThresh = 20 * fees;
 		for (const stock of stocks) {
-			const money = ns.getPlayer().money;
+			const money = ns.getPlayer().money * 0.25; //Limit the money used to 25% of player funds
 			if (stock.forecast > 0.55) {
 				if (money > riskThresh) {
 					const sharesWeCanBuy = Math.floor((money - fees) / stock.askPrice);
 					const sharesToBuy = Math.min(stock.maxShares, sharesWeCanBuy);
-					if (ns.stock.buy(stock.sym, sharesToBuy) > 0) {
+					if (ns.stock.buyStock(stock.sym, sharesToBuy) > 0) {
 						ns.print(`WARN\t${stock.summary}\t- LONG @ ${ns.nFormat(sharesToBuy, "$0.0a")}`);
 					}
 				}
