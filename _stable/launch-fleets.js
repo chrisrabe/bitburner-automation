@@ -42,7 +42,7 @@ export async function main(ns) {
 	async function getShips() {
 		var nodes = getNetworkNodes(ns);
 		var servers = nodes.filter(node => {
-			if (node === homeServ) {
+			if (node === homeServ || node.includes('hacknet-server-')) {
 				return false;
 			}
 			return canPenetrate(ns, node, cracks) && hasRam(ns, node, virusRam);
